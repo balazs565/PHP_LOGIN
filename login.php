@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (password_verify($password, $row['password'])) {
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['is_admin'] = $row['is_admin'];
-            
+
             if ($_SESSION['is_admin'] == 1) {
               
                 header("Location: admin.php");
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <?php if (!empty($error)) echo "<p style='color:red;text-align:center;'>$error</p>"; ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
   <meta charset="UTF-8">
   <title>Login</title>

@@ -10,14 +10,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<h1>Servicii Active</h1>
-<ul>
-    <?php
-    while($row = $result->fetch_assoc()){
-        echo "<li>" . htmlspecialchars($row['name']) . " - Durata: " . htmlspecialchars($row['duration_min']) . " minute - Pret: " . htmlspecialchars($row['price']) . " RON</li>";
-    }
-    ?>
-</ul>
+
 
 
 <!DOCTYPE html>
@@ -84,9 +77,9 @@ $result = $stmt->get_result();
         echo "<tr><th>Serviciu</th><th>Durata (minute)</th><th>Pret (RON)</th></tr>";
         while($row = $result->fetch_assoc()){
             echo"<tr>";
-            echo"<td>".htmlspecialchars($row['servicenames'])."</td>";
-            echo"<td>".htmlspecialchars($row['duration'])."</td>";
-            echo"<td>".htmlspecialchars($row['price'])."</td>";
+            echo"<td>".htmlspecialchars($row   ['servicenames'])."</td>";
+            echo"<td>".htmlspecialchars($row   ['duration'])."</td>";
+            echo"<td>".htmlspecialchars($row   ['price'])."</td>";
             echo"</tr>";
         }
         echo "</table>";
