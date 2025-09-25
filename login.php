@@ -95,6 +95,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
      .login .services-btn:hover{
       background:#00780D
      }
+
+     .login .fmp-btn{
+      background:red;
+     }
+      .login .fmp-btn:hover{
+        background:#b30000
+      }
+
+    
   </style>
 </head>
 <body>
@@ -105,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <button type="submit">Logare</button>
     <button type="button" onclick="window.location.href='registration.php'">Inregistrare</button>
     <button type="button" class="services-btn" onclick="window.location.href='serviceswithoutlogin.php'">Vezi Servicii</button>
+    <button type="button" class="fmp-btn" onclick="window.location.href='fmp.php'">Am uitat parola</button>
   </form>
   <form class="show" method="GET" action="services.php">
     </form>
