@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 }
 ?>
 
+
 <?php if (isset($_GET['msg']) && $_GET['msg'] == 'success'): ?>
   <p style="color: green; text-align:center;">Contul a fost creat cu succes! Te poti autentifica acum.</p>
 <?php endif; ?>
@@ -87,6 +88,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
      { 
         background:#0056b3;
      }
+     .login .services-btn{
+  background:#28a745;
+  
+     }
+     .login .services-btn:hover{
+      background:#00780D
+     }
   </style>
 </head>
 <body>
@@ -96,6 +104,26 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <input type="password" name="password" placeholder="Parola" required>
     <button type="submit">Logare</button>
     <button type="button" onclick="window.location.href='registration.php'">Inregistrare</button>
+    <button type="button" class="services-btn" onclick="window.location.href='serviceswithoutlogin.php'">Vezi Servicii</button>
   </form>
+  <form class="show" method="GET" action="services.php">
+    </form>
 </body>
+
+<?php
+
+function showServices() {
+    $stmt = $con->prepare("SELECT servicenames FROM U407hYho_services");
+    $stmt->execute();
+    $result = $stmt->get_result();
+    echo '<form method="GET" action="services.php">';
+    if($result && $result->num_rows > 0){
+        echo '<select name="service_id" required>';
+        while($row = $result->fetch_assoc()){
+            echo '<option value="'.$row['id'].'">'.htmlspecialchars($row['servicenames']).'</option>';
+        }
+        echo '</select>';
+    }
+}
+?>
 </html>
