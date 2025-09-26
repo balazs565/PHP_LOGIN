@@ -85,18 +85,32 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         color:red;
          margin-bottom:0.5rem; 
         }
-        
+        .login .back-button{
+            background:red;
+        }
+    .login .back-button:hover{
+        background:#780000;
+    }
+
+    .chckbox{
+        font-size: 14px;
+        font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <form class="login" method="post" action="">
     <h2>Inregistrare</h2>
     <?php if (!empty($error)) echo "<div class='error'>$error</div>"; ?>
-    <input type="text" name="name" placeholder="Nume" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Parola" required>
+    <input type="text" name="name" placeholder="Nume*" required>
+    <input type="email" name="email" placeholder="Email*" required>
+    <input type="password" name="password" placeholder="Parola*" required>
+    <label class="chckbox">Sunt de acord cu Termenii si Conditiile*
+    <input type="checkbox" name="terms" class="chckbox" required>
+    </label>
+    <br>
     <button type="submit">Creeaza cont</button>
-    <button type="button" onclick="window.location.href='login.php'">Inapoi la login</button>
+    <button class="back-button" type="button" onclick="window.location.href='login.php'">Inapoi la login</button>
   </form>
 </body>
 </html>
