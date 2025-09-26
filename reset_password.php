@@ -25,11 +25,9 @@ if($row = $result->fetch_assoc()){
     $user_id = $row['user_id'];
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
-
       if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
         die('Autenticare de CSRF');
-    }
-
+      }
         $new_password = $_POST['new_password'];
         $confirm_password = $_POST['confirm_password'];
 

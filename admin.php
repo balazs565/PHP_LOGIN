@@ -9,11 +9,10 @@ $token=$_SESSION['token'];
 
 // Services Create
 if(isset($_POST['create_service'])){
-
+    
     if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
         die('Autenticare de CSRF');
     }
-
     $name = trim($_POST['servicenames']);
     $duration = (int)$_POST['duration'];
     $price = (float)$_POST['price'];
@@ -428,7 +427,7 @@ $result = $stmt->get_result();
 
 
 if(isset($_POST['change_status'])){
-    
+
 if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
         die('Autenticare de CSRF');
     }
