@@ -10,9 +10,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -68,25 +65,22 @@ $result = $stmt->get_result();
     <h1>Servicii Active</h1>
 
     <?php
-    $stmt=$con->prepare("SELECT servicenames, duration, price FROM u407hyho_services WHERE active = 1");
+    $stmt=$con->prepare("SELECT id,servicenames, duration, price FROM u407hyho_services WHERE active = 1");
     $stmt->execute();
     $result = $stmt->get_result();
+echo"<table>";
+echo"<tr><th>Serviciu</th><th>Durata</th><th>Pret</th></tr>";
 
-    if($result-> num_rows > 0){
-        echo "<table>";
-        echo "<tr><th>Serviciu</th><th>Durata (minute)</th><th>Pret (RON)</th></tr>";
-        while($row = $result->fetch_assoc()){
-            echo"<tr>";
-            echo"<td>".htmlspecialchars($row   ['servicenames'])."</td>";
-            echo"<td>".htmlspecialchars($row   ['duration'])."</td>";
-            echo"<td>".htmlspecialchars($row   ['price'])."</td>";
-            echo"</tr>";
+    while($row = $result->fetch_assoc()){
+        echo "<tr onclick=\"window.location.href='timeslots.php?id=".$row['id']."'\" style=\"cursor:pointer;\">";
+        echo "<td>".$row['servicenames']."</td>";
+        echo "<td>".$row['duration']."</td>";
+        echo "<td>".$row['price']."</td>";
+        echo"</tr>";
         }
         echo "</table>";
-    }else{
-        echo "<p>Nu sunt servicii active in acest moment.</p>";
-    }
-    ?>
+   ?>
+
     <button class="back-btn" onclick="window.location.href='mainpage.php'">Inapoi la Profil</button>
 </body>
 </html>

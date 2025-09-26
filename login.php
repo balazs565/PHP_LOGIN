@@ -1,6 +1,17 @@
 <?php
-session_start();
 include("connect.php");
+
+
+session_set_cookie_params([
+  'lifetime' => 0,
+  'path' =>'/',
+  'domain' => '',
+  'secure' => true,
+  'httponly' => true,
+  'samesite' => 'Strict'
+]);
+session_start();
+
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $email = trim($_POST['email']);
@@ -13,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if ($row = $result->fetch_assoc()) {
         if (password_verify($password, $row['password'])) {
+            session_regenerate_id(true);
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['is_admin'] = $row['is_admin'];
 
