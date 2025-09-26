@@ -3,6 +3,11 @@ session_start();
 include("connect.php");
 include("fx.php");
 
+if(empty($_SESSION['token'])){
+$_SESSION['token'] = bin2hex(random_bytes(32));
+}
+$token=$_SESSION['token'];
+
 $user_data = check_login($con);
 
 
@@ -10,6 +15,11 @@ $upload_error ="";
 $avatar_preview = $user_data['avatar'] ?? 'default.png';
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_FILES['avatar'])){
+
+if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
+
     $file=$_FILES['avatar'];
     $allowed_types=['image/jpeg', 'image/png'];
     $max_size = 2 * 1024 * 1024;
@@ -156,6 +166,7 @@ $note_result = $stmt->get_result()->fetch_assoc();
 
         <form method="POST" enctype="multipart/form-data">
             <?php if($upload_error) echo "<p class='error'>$upload_error</p>"; ?>
+            <input type="hidden" name="csrf_token" value="<?= $token ?>">
             <input type="file" name="avatar" accept=".jpg,.jpeg,.png" required>
             <button type="submit">Încarcă Avatar</button>
             <button type="button" onclick="window.location.href='myreservations.php'">Programarile Mele</button>

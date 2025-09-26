@@ -2,11 +2,18 @@
 session_start();
 include("connect.php");
 
-
-
+if(empty($_SESSION['token'])){
+$_SESSION['token'] = bin2hex(random_bytes(32));
+}
+$token=$_SESSION['token'];
 
 // Services Create
 if(isset($_POST['create_service'])){
+
+    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
+
     $name = trim($_POST['servicenames']);
     $duration = (int)$_POST['duration'];
     $price = (float)$_POST['price'];
@@ -24,6 +31,11 @@ if(isset($_POST['create_service'])){
 // Services Update
 $edit_service = null;
 if(isset($_POST['edit_service'])){
+
+if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
+
     $id = (int)$_POST['service_id'];
     $stmt = $con->prepare("SELECT * FROM u407hyho_services WHERE id=?");
     $stmt->bind_param("i", $id);
@@ -51,6 +63,10 @@ if(isset($_POST['update_service'])){
 // Services Delete
 
 if(isset($_POST['delete_service'])){
+
+    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
     $id = (int)$_POST['service_id'];
     $stmt = $con->prepare("DELETE FROM u407hyho_services WHERE id=?");
     $stmt->bind_param("i", $id);
@@ -65,6 +81,9 @@ if(isset($_POST['delete_service'])){
 
 // Timeslot Create
 if(isset($_POST['create_timeslot'])){
+    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
     $service_id = (int)$_POST['service_id'];
     $date = $_POST['date'];
     $start_time = $_POST['start_time'];
@@ -84,6 +103,9 @@ if(isset($_POST['create_timeslot'])){
 // Timeslot Update
 $edit_timeslot = null;
 if(isset($_POST['edit_timeslot'])){
+    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
     $id = (int)$_POST['timeslot_id'];
     $stmt = $con->prepare("SELECT * FROM u407hyho_timeslots WHERE id=?");
     $stmt->bind_param("i", $id);
@@ -92,6 +114,9 @@ if(isset($_POST['edit_timeslot'])){
 }
 
 if(isset($_POST['update_timeslot'])){
+    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
     $id = (int)$_POST['timeslot_id'];
     $service_id = (int)$_POST['service_id'];
     $date = $_POST['date'];
@@ -112,6 +137,9 @@ if(isset($_POST['update_timeslot'])){
 }
 
 if(isset($_POST['update_timeslot'])){
+    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
     $id = (int)$_POST['timeslot_id'];
     $service_id = (int)$_POST['service_id'];
     $date = $_POST['date'];
@@ -133,6 +161,9 @@ if(isset($_POST['update_timeslot'])){
 
 // Timeslot Delete
 if(isset($_POST['delete_timeslot'])){
+    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
     $id = (int)$_POST['timeslot_id'];
     $stmt = $con->prepare("DELETE FROM u407hyho_timeslots WHERE id=?");
     $stmt->bind_param("i", $id);
@@ -245,6 +276,7 @@ $result = $stmt->get_result();
             <td><?= $row['active'] ? 'Da' : 'Nu' ?></td>
             <td>
                 <form method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="<?= $token?>">
                     <input type="hidden" name="service_id" value="<?= $row['id'] ?>">
                     <button type="submit" name="edit_service">Editare</button>
                 </form>
@@ -262,6 +294,7 @@ $result = $stmt->get_result();
 <h3>Adaugare Serviciu Nou</h3>
 <form method="POST" action="">
     <input type="text" name="servicenames" placeholder="Numele Serviciului" required>
+    <input type="hidden" name="csrf_token" value="<?= $token?>">
     <input type="number" name="duration" placeholder="Durata (minute)" required>
     <input type="number" name="price" placeholder="Pret (RON)" required>
     Activ: <input type="checkbox" name="active" value="1" checked>
@@ -274,6 +307,7 @@ $result = $stmt->get_result();
 <h3>Modificare Serviciu</h3>
 <form method="POST" action="">
     <input type="hidden" name="service_id" value="<?= $edit_service['id'] ?>">
+    <input type="hidden" name="csrf_token" value="<?= $token?>">
     <input type="text" name="servicenames" value="<?= htmlspecialchars($edit_service['servicenames']) ?>" required>
     <input type="number" name="duration" value="<?= $edit_service['duration'] ?>" required>
     <input type="number" name="price" value="<?= $edit_service['price'] ?>" required>
@@ -307,6 +341,7 @@ $result2 = $stmt2->get_result();
             <td><?= $row['status'] ?></td>
             <td>
                 <form method="POST" style="display:inline;">
+                <input type="hidden" name="csrf_token" value="<?= $token?>">
                     <input type="hidden" name="timeslot_id" value="<?= $row['id'] ?>">
                     <button type="submit" name="edit_timeslot">Editare</button>
                 </form>
@@ -322,6 +357,7 @@ $result2 = $stmt2->get_result();
 <?php if(!$edit_timeslot): ?>
 <h3>Adaugare Orar Nou</h3>
 <form method="POST" action="">
+    <input type="hidden" name="csrf_token" value="<?= $token?>">
     <label>Serviciu:
         <select name="service_id" required>
             <?php
@@ -350,6 +386,7 @@ $result2 = $stmt2->get_result();
 <?php if($edit_timeslot): ?>
 <h3>Modificare Orar</h3>
 <form method="POST" action="">
+    <input type="hidden" name="csrf_token" value="<?= $token?>">
     <input type="hidden" name="timeslot_id" value="<?= $edit_timeslot['id'] ?>">
     <label>Serviciu:
         <select name="service_id" required>
@@ -391,6 +428,11 @@ $result = $stmt->get_result();
 
 
 if(isset($_POST['change_status'])){
+    
+if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
+
     $appointment_id = (int)$_POST['appointment_id'];
     $new_status = $_POST['status'];
     $note=$_POST['note'];
@@ -460,6 +502,7 @@ if(isset($_POST['change_status'])){
     <td>
         <form method="POST">
             <?php $note=$row['note']; ?>
+            <input type="hidden" name="csrf_token" value="<?= $token?>">
             <input type="hidden" name="appointment_id" value="<?= htmlspecialchars($row['appointment_id']) ?>">
             <input type="text" name="note" value="<?= htmlspecialchars($row[$note] ?? '') ?>">
             <select name="status">

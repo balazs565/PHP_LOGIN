@@ -1,11 +1,21 @@
 <?php
 date_default_timezone_set('Europe/Bucharest');
 session_start();
+
+if(empty($_SESSION['token'])){
+$_SESSION['token'] = bin2hex(random_bytes(32));
+}
+$token=$_SESSION['token'];
+
 include("connect.php");
 
 $message = "";
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
+
+    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
     $email = trim($_POST['email']);
 
     $stmt = $con->prepare("SELECT id FROM u407hyho_users WHERE email = ?");

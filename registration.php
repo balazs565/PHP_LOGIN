@@ -6,7 +6,17 @@ function generateUserId($length = 8) {
     return bin2hex(random_bytes($length)); 
 }
 
+if(empty($_SESSION['token'])){
+$_SESSION['token'] = bin2hex(random_bytes(32));
+}
+$token=$_SESSION['token'];
+
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+      if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -102,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   <form class="login" method="post" action="">
     <h2>Inregistrare</h2>
     <?php if (!empty($error)) echo "<div class='error'>$error</div>"; ?>
+    <input type="hidden" name="csrf_token" value="<?= $token ?>">
     <input type="text" name="name" placeholder="Nume*" required>
     <input type="email" name="email" placeholder="Email*" required>
     <input type="password" name="password" placeholder="Parola*" required>

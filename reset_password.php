@@ -2,6 +2,12 @@
 session_start();
 include("connect.php");
 
+if(empty($_SESSION['token'])){
+$_SESSION['token'] = bin2hex(random_bytes(32));
+}
+$token=$_SESSION['token'];
+
+
 $message = "";
 
 if(!isset($_GET['token'])){
@@ -19,6 +25,11 @@ if($row = $result->fetch_assoc()){
     $user_id = $row['user_id'];
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
+
+      if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
+
         $new_password = $_POST['new_password'];
         $confirm_password = $_POST['confirm_password'];
 
@@ -103,6 +114,7 @@ if($row = $result->fetch_assoc()){
         <?php if(!empty($message)) echo "<p class='message'>".$message."</p>"; ?>
         <?php if(isset($user_id)): ?>
         <form method="POST" action="">
+            <input type="hidden" name="csrf_token" value="<?= $token ?>">
             <input type="password" name="new_password" placeholder="Parola Noua" required>
             <input type="password" name="confirm_password" placeholder="Confirma Parola" required>
             <button type="submit">Reseteaza Parola</button>

@@ -12,8 +12,18 @@ session_set_cookie_params([
 ]);
 session_start();
 
+if(empty($_SESSION['token'])){
+$_SESSION['token'] = bin2hex(random_bytes(32));
+}
+$token=$_SESSION['token'];
+
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
+
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
@@ -121,6 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <body>
   <form class="login" method="POST" action="">
     <h2>Logare</h2>
+    <input type="hidden" name="csrf_token" value="<?= $token ?>">
     <input type="email" name="email" placeholder="Email" required>
     <input type="password" name="password" placeholder="Parola" required>
     <button type="submit">Logare</button>

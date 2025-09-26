@@ -3,6 +3,11 @@ session_start();
 include("connect.php");
 include("fx.php");
 
+if(empty($_SESSION['token'])){
+$_SESSION['token'] = bin2hex(random_bytes(32));
+}
+$token=$_SESSION['token'];
+
 $user_data = check_login($con);
 
 if(!isset($_GET['id'])){
@@ -22,6 +27,11 @@ $service_name = $service_result ? $service_result['servicenames'] : 'Serviciu ne
 
 
 if(isset($_POST['book_timeslot'])){
+
+if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
+        die('Autenticare de CSRF');
+    }
+
     $timeslot_id = (int)$_POST['timeslot_id'];
 
     
@@ -146,6 +156,7 @@ button:disabled {
             <td><?= $remaining ?></td>
             <td>
                 <form method="POST">
+                    <input type="hidden" name="csrf_token" value="<?= $token ?>">
                     <input type="hidden" name="timeslot_id" value="<?= $row['id'] ?>">
                     <button type="submit" name="book_timeslot" <?= $row['already_booked'] || $remaining<=0 ? 'disabled' : '' ?>>
                         <?= $row['already_booked'] ? 'Rezervat' : 'Rezerva' ?>
