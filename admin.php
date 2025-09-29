@@ -135,28 +135,6 @@ if(isset($_POST['update_timeslot'])){
     }
 }
 
-if(isset($_POST['update_timeslot'])){
-    if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
-        die('Autenticare de CSRF');
-    }
-    $id = (int)$_POST['timeslot_id'];
-    $service_id = (int)$_POST['service_id'];
-    $date = $_POST['date'];
-    $start_time = $_POST['start_time'];
-    $end_time = $_POST['end_time'];
-    $capacity = (int)$_POST['capacity'];
-    $status = isset($_POST['status']) && $_POST['status'] == 'open' ? 'open' : 'closed';
-
-    $stmt = $con->prepare("UPDATE u407hyho_timeslots SET service_id=?, date=?, start_time=?, end_time=?, capacity=?, status=? WHERE id=?");
-    $stmt->bind_param("isssisi", $service_id, $date, $start_time, $end_time, $capacity, $status, $id);
-    if($stmt->execute()){
-        $timeslot_msg = "Orar modificat cu succes!";
-        header("Refresh:0");
-        exit;
-    } else {
-        $timeslot_msg = "Eroare: ".$stmt->error;
-    }
-}
 
 // Timeslot Delete
 if(isset($_POST['delete_timeslot'])){

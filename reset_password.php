@@ -113,7 +113,7 @@ if($row = $result->fetch_assoc()){
 <body>
     <div class="reset-container">
         <h2>Resetare Parola</h2>
-        <?php if(!empty($message)) echo "<p class='message'>".$message."</p>"; ?>
+        <?php if(!empty($message)) echo "<p class='".$message_class."'>".$message."</p>"; ?>
         <?php if(isset($user_id)): ?>
         <form method="POST" action="">
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
