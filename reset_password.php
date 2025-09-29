@@ -2,10 +2,11 @@
 session_start();
 include("connect.php");
 
-if(empty($_SESSION['token'])){
-$_SESSION['token'] = bin2hex(random_bytes(32));
+if(empty($_SESSION['csrf_token'])){
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-$token=$_SESSION['token'];
+
+$csrf_token=$_SESSION['csrf_token'];
 
 
 $message = "";
@@ -14,10 +15,11 @@ if(!isset($_GET['token'])){
     die("Link invalid!");
 }
 
-$token = $_GET['token'];
+
+$reset_token = $_GET['token'];
 
 $stmt = $con->prepare("SELECT user_id FROM u407hYho_password_resets WHERE token = ? AND expires_at > NOW()");
-$stmt->bind_param("s", $token);
+$stmt->bind_param("s", $reset_token);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -25,9 +27,11 @@ if($row = $result->fetch_assoc()){
     $user_id = $row['user_id'];
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
-      if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['token'] ){
-        die('Autenticare de CSRF');
-      }
+
+        if(!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token'] ){
+            die('Autenticare de CSRF');
+        }
+     
         $new_password = $_POST['new_password'];
         $confirm_password = $_POST['confirm_password'];
 
@@ -45,7 +49,7 @@ if($row = $result->fetch_assoc()){
             $stmt->execute();
             $message_class="success";
 
-            $message = "Parola a fost resetata cu succes! Te vei redirectiona la login in 3 secunde...";
+            $message = "Parola a fost resetata cu succes! Te vei redirectiona la login in cateva secunde.";
             echo '<meta http-equiv="refresh" content="3;url=login.php">';
         }
     }
@@ -112,7 +116,7 @@ if($row = $result->fetch_assoc()){
         <?php if(!empty($message)) echo "<p class='message'>".$message."</p>"; ?>
         <?php if(isset($user_id)): ?>
         <form method="POST" action="">
-            <input type="hidden" name="csrf_token" value="<?= $token ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
             <input type="password" name="new_password" placeholder="Parola Noua" required>
             <input type="password" name="confirm_password" placeholder="Confirma Parola" required>
             <button type="submit">Reseteaza Parola</button>

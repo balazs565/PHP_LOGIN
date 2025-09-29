@@ -115,6 +115,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         <h2>Recuperarea Parola</h2>
         <?php if(!empty($message)) echo "<p class='message'>$message</p>"; ?>
         <form method="POST" action="">
+             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($token); ?>">
             <input type="email" id="email" name="email" placeholder="Email" required>
             <button type="submit">Trimite</button>
             <button type="button" class="back-button" onclick="window.location.href='login.php'">Inapoi la Logare</button>
