@@ -1,0 +1,25 @@
+Biztonsági jegyzet
+
+1. Jelszókezelés
+- A jelszavak soha nem nyers formában kerülnek az adatbázisba.
+- Regisztráláskor a password_hash() függvény végzi a jelszó titkosítását.
+- Azonos jelszavak is különböző, randomizált hash kódot kapnak.
+- Belépéskor a password_verify() függvény ellenőrzi a jelszót.
+- Ha az adatbázis biztonságát áttörik, a jelszavak nem visszafejthetőek.
+
+2. CSRF-védelem
+- Minden laphoz véletlenszerűen generált token készül.
+- A szerver minden session-höz létrehoz egy értéket: $_SESSION['token'] = bin2hex(random_bytes(32)).
+- A token rejtett mezőben kerül továbbításra a HTML kódban.
+- Beküldéskor a szerver ellenőrzi, hogy a kapott token megegyezik-e a sessionben tárolttal.
+- Ha nem egyezik, a rendszer die() függvénnyel leállítja a folyamatot.
+- Ez védi az alkalmazást a hamis POST kérésektől.
+
+3. Feltöltésvédelem (Avatar feltöltés)
+- Többrétegű védelem:
+    - MIME-típus ellenőrzés: csak JPG és PNG engedélyezett.
+    - Méretkorlátozás: maximum 2MB.
+    - Biztonságos fájlnév: a feltöltött fájl új, bin2hex függvénnyel generált nevet kap.
+        - Megelőzi rosszindulatú fájlnevek feltöltését.
+        - Titkosítja a fájlneveket.
+    - Régi avatar törlése: az előző fájl törlődik, csökkentve a szerver terhelését.
