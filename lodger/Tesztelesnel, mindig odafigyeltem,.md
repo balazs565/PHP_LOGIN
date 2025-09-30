@@ -28,9 +28,9 @@ A bejelentkezési felületen:
 
 
 
-* E-mail formátum beírása nélkül nem fogadja el a szoftver a bejelentkezést.
-* E-mail/Jelszó kombinációja menjen.
-* Bejelentkezésnel ellenőrizze a rendszer, hogy a felhasználó kliens vagy admin-e?
+* E-mail formátum beírása nélkül nem fogadja el a szoftver a bejelentkezést. (Üresen hagyva teszteltem)
+* E-mail/Jelszó kombinációja menjen. (Teszteltem, hogy elírom az egyiket)
+* Bejelentkezésnel ellenőrizze a rendszer, hogy a felhasználó kliens vagy admin-e? (Az admint egy egyszeri php scripttel készítettem, utána pedig az adott e-mail és jelszóval teszteltem.)
 
 
 
@@ -40,7 +40,7 @@ Regisztrációs felületen:
 
 
 
-* Ne lehessen ugyanolyan e-mail címmel regisztrálni.
+* Ne lehessen ugyanolyan e-mail címmel regisztrálni.(Teszteltem több fiókot egy e-mailre készíteni.)
 * Minden mező kitöltése kötelező legyen.
 
 
