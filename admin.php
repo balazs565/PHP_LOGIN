@@ -258,6 +258,7 @@ $result = $stmt->get_result();
                     <button type="submit" name="edit_service">Editare</button>
                 </form>
                 <form method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="<?= $token?>">
                     <input type="hidden" name="service_id" value="<?= $row['id'] ?>">
                     <button type="submit" name="delete_service" onclick="return confirm('Sigur vrei sa stergi?')">Stergere</button>
                 </form>
