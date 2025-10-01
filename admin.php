@@ -324,6 +324,7 @@ $result2 = $stmt2->get_result();
                     <button type="submit" name="edit_timeslot">Editare</button>
                 </form>
                 <form method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="<?= $token?>">
                     <input type="hidden" name="timeslot_id" value="<?= $row['id'] ?>">
                     <button type="submit" name="delete_timeslot" onclick="return confirm('Sigur vrei sa stergi?')">Stergere</button>
                 </form>
