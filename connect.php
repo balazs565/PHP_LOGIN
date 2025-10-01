@@ -117,7 +117,7 @@ $inserts=[
 
     "INSERT IGNORE INTO `u407hyho_users`(`id`,`user_id`,`name`,`email`,`password`,`avatar`,`is_admin`) VALUES 
     (1,1,'Admin','root@root.com', '$admin_pass', 'default.png',1),
-    (2,2,'User','user@user.com', '$user_pass', 'default.png',0);"
+    (2,2,'User','123@123.com', '$user_pass', 'default.png',0);"
 ];
 
 foreach($inserts as $insert_sql){
