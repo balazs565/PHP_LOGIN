@@ -107,7 +107,7 @@ foreach($creator as $table_sql){
 }
 
 $admin_pass= password_hash("root", PASSWORD_DEFAULT);
-$user_pass= password_hash("user", PASSWORD_DEFAULT);
+$user_pass= password_hash("123", PASSWORD_DEFAULT);
 
 $inserts=[
     "INSERT IGNORE INTO `u407hyho_services`(`id`,`servicenames`,`duration`,`price`,`active`) VALUES 
